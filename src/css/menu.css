@@ -1,0 +1,30 @@
+#menu_pane{
+
+    -fx-background-image: url('/assets/background-image.png');
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-attachment: fixed;
+    -fx-margin: 0;
+    -fx-padding: 0;
+    -fx-border: none;
+    -fx-background-color: transparent;
+
+}
+
+.button{
+
+    -fx-text-fill: black;
+
+}
+
+#title_text{
+
+    -fx-text-fill: white;
+    -fx-font-size: 48px;
+    -fx-font-family: "Arial Black";
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 5, 0, 0, 2);
+    -fx-stroke: white;
+    -fx-stroke-width: 2px;
+
+}
