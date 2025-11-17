@@ -63,11 +63,13 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage){
 
+        //This is for the window
         gamePane = new Pane();
         gamePane.setId("root_pane");
 
         try{
 
+            //This is for the main menu (FXML) thing
             URL fxmlUrl = getClass().getResource("/main_menu/menu.fxml");            
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
             VBox menuPane = loader.load();
@@ -76,6 +78,8 @@ public class Game extends Application {
             menuController.setGame(this);
 
             scene = new Scene(menuPane, WINDOW_LENGTH, WINDOW_HEIGHT);
+
+            //For detecting keyboard inputs (for the movement)
 
             scene.setOnKeyPressed(event -> {
 
@@ -96,10 +100,21 @@ public class Game extends Application {
 
             });
 
-            scene.setOnMousePressed(event -> mouseButtonsPressed.add(event.getButton()));
-            scene.setOnMouseReleased(event -> mouseButtonsPressed.remove(event.getButton()));
+            scene.setOnMousePressed(event -> {
 
+                mouseButtonsPressed.add(event.getButton());
+
+            });
+            scene.setOnMouseReleased(event -> {
+
+                mouseButtonsPressed.remove(event.getButton());
+
+            });
+
+            //Link to CSS!!!!
             scene.getStylesheets().add(getClass().getResource("/css/game.css").toExternalForm());
+
+            //Setting up the window thing
             primaryStage.setTitle("Space Glider");
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -115,40 +130,51 @@ public class Game extends Application {
  
     public void startGame(){
 
+        //Create new player / load player object
         player = new Player();
         player.setPos(WINDOW_LENGTH/2, WINDOW_HEIGHT/2);
 
+        //Clear the everything first (start with empty canvas with no enemies or bullets or something idk)
         obstacles.clear();
         bullets.clear();
         gamePane.getChildren().clear();
 
+        //Put the player into the gamepane (or the window)
         gamePane.getChildren().add(player.getNode());
 
+        //Call and start the game loop
         initializeGameLoop();
         gameLoop.start();
 
+        //Set the scene (or the window) and put it on the screen
         scene.setRoot(gamePane);
 
     }
 
     private void initializeGameLoop(){
 
+        //This is the game loop, essentially, the loop that updates every frame (loops but way faster)
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 
+                //This is for the player movement
                 if (keysPressed.contains(KeyCode.W)){player.moveUp();}
                 if (keysPressed.contains(KeyCode.S)){player.moveDown();}
                 if (keysPressed.contains(KeyCode.A)){player.moveLeft();}
                 if (keysPressed.contains(KeyCode.D)){player.moveRight();}
 
+                //Get the position of the cursor, make the player face there
                 player.face_direction(mouse_x_position, mouse_y_position);
 
+                //Increment spawntimer nad bullet time every frame
                 spawnTimer++;
                 bulletTimer++;
 
+                //If the bulletTimer is equal to the bullet interval, then shoot
                 if(bulletTimer >= bulletInterval){
 
+                    //Create a new bullet
                     Bullet newBullet = new Bullet(player.getX(), player.getY(), mouse_x_position, mouse_y_position);
                     bullets.add(newBullet);
                     gamePane.getChildren().add(newBullet.getNode());
@@ -156,8 +182,12 @@ public class Game extends Application {
 
                 }
 
+                //Render all of the bullets
                 Iterator<Bullet> bulletIterator = bullets.iterator();
 
+                //While there are still bullets, check the distance of each obstacles there are
+                //I am checking for the distance between them, if it's less than 30, then it means
+                //it is "shot", so I remove the obstacle
                 while(bulletIterator.hasNext()){
 
                     Bullet bullet = bulletIterator.next();
@@ -170,6 +200,8 @@ public class Game extends Application {
 
                     Iterator<Obstacle> obstactsIterator = obstacles.iterator();
 
+                    //Iterate through all the obstacles and check if the distance between them and
+                    //the bullet is less that 30
                     while(obstactsIterator.hasNext()){
 
                         Obstacle obstacle = obstactsIterator.next();
@@ -178,7 +210,8 @@ public class Game extends Application {
                         double delta_y = bullet_y - obstacle.getY();
 
                         double distance = Math.sqrt(delta_x * delta_x + delta_y * delta_y);
-
+                        
+                        //If its less than 30, then shoot, bye obstacle
                         if(distance < 30){
 
                             gamePane.getChildren().remove(bullet.getNode());
@@ -192,6 +225,7 @@ public class Game extends Application {
 
                     }
 
+                    //This is if the bullet is off the screen, then we can remove it (not needed anymore lol)
                     if(!bullet_hit && bullet.isOffScreen(WINDOW_LENGTH, WINDOW_HEIGHT)){
 
                         gamePane.getChildren().remove(bullet.getNode());
@@ -201,6 +235,7 @@ public class Game extends Application {
 
                 }
 
+                //Same idea with the bullets, just spawn in everytime lol
                 if(spawnTimer >= spawnInterval){
 
                     Obstacle newObstacle = new Obstacle(WINDOW_LENGTH, WINDOW_HEIGHT);
@@ -210,8 +245,10 @@ public class Game extends Application {
 
                 }
 
+                //Iterate all 
                 Iterator<Obstacle> obstacleIterator = obstacles.iterator();
 
+                //For iterating and checking all the obstacles there are currently
                 while(obstacleIterator.hasNext()){
                     
                     Obstacle obstacle = obstacleIterator.next();
@@ -231,6 +268,11 @@ public class Game extends Application {
 
                     double distance_player_obstacle = Math.sqrt(distance_x_player_obstacle * distance_x_player_obstacle+ distance_y_player_obstacle * distance_y_player_obstacle);
             
+                    //If the obstacle "touches" the player, remove the player and stop the program, meaning
+                    //Game over
+                    //TODO: Once the game is over, make a FXML file that asks if retry or not
+                    //Instead of stopping the game/program
+
                     if(distance_player_obstacle < 50){
 
                         gamePane.getChildren().remove(player.getNode());
@@ -240,6 +282,7 @@ public class Game extends Application {
 
                     }
 
+                    //If the obstacle is off the screen now, remove it
                     if(obstacle.isOffScreen(WINDOW_LENGTH, WINDOW_HEIGHT)){
 
                         gamePane.getChildren().remove(obstacle.getNode());
@@ -249,6 +292,8 @@ public class Game extends Application {
 
                 }
 
+                //This part makes it so that the obstacles are scaling / the obstacles are increasing
+                //as the game goes on
                 scalingTimer++;
 
                 if(scalingTimer >= SCALING_INTERVAL_FRAMES){
