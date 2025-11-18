@@ -3,6 +3,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Node;
 
+//TODO: Different levels of player characters
+
 public class Player {
     
     private Node node;

@@ -57,6 +57,7 @@ public class Bullet {
 
     }
 
+    //This method is used for updating the position of the bullet
     public void update(){
 
         this.x += this.delta_x;
