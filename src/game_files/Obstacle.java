@@ -28,6 +28,8 @@ public class Obstacle {
 
         this.node = OBSTACLE_VIEW;
 
+        this.node.setMouseTransparent(true);
+
         int side = (int)(Math.random()*4);
         double spawnBuffer = 50.0;
 

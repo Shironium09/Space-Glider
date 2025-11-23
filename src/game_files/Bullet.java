@@ -29,6 +29,8 @@ public class Bullet {
 
         this.node = BULLET_VIEW;
 
+        this.node.setMouseTransparent(true);
+
         this.x = startX;
         this.y = startY;
 

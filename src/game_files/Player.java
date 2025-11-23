@@ -27,6 +27,8 @@ public class Player {
 
         this.node = PLAYER_VIEW;
 
+        this.node.setMouseTransparent(true);
+
         this.x = 0;
         this.y = 0;
 

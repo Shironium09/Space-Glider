@@ -7,14 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main_menu.MenuController;
+import main_menu.PauseController;
 import javafx.animation.AnimationTimer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javafx.application.Platform;
+
 
 public class Game extends Application {
 
@@ -30,6 +35,12 @@ public class Game extends Application {
     private Pane gamePane;
     private Scene scene;
 
+    //For pausing
+    private StackPane gameRoot;
+    private Parent pauseMenu;
+    private boolean isPaused = false;
+    private Parent menuPane;
+
     //This is for the movement and mouse !!!
     private HashSet<KeyCode> keysPressed = new HashSet<>();
     private HashSet<MouseButton> mouseButtonsPressed = new HashSet<>();
@@ -37,11 +48,11 @@ public class Game extends Application {
     //This is for the obstacles (put them in array)
     private List<Obstacle> obstacles = new ArrayList<>();
 
-    //This is for the Bullets
+    //This is for the Bullets (also put them in array)
     private List<Bullet> bullets = new ArrayList<>();
 
     //Spawn Rate for the obstacles
-    private double spawnRate = 3.0;
+    private double spawnRate = 5.0;
     private double spawnInterval = (10.0*60.0) / spawnRate;
     private int spawnTimer = 0;
 
@@ -72,18 +83,39 @@ public class Game extends Application {
             //This is for the main menu (FXML) thing
             URL fxmlUrl = getClass().getResource("/main_menu/menu.fxml");            
             FXMLLoader loader = new FXMLLoader(fxmlUrl);
-            VBox menuPane = loader.load();
+            menuPane = loader.load();
 
             MenuController menuController = loader.getController();
             menuController.setGame(this);
 
             scene = new Scene(menuPane, WINDOW_LENGTH, WINDOW_HEIGHT);
 
+            URL pauseUrl = getClass().getResource("/main_menu/pause.fxml");
+            FXMLLoader pauseLoader = new FXMLLoader(pauseUrl);
+            pauseMenu = pauseLoader.load();
+
+            PauseController pauseController = pauseLoader.getController();
+            pauseController.setGame(this); 
+
             //For detecting keyboard inputs (for the movement)
 
             scene.setOnKeyPressed(event -> {
 
                 keysPressed.add(event.getCode());
+
+                if(event.getCode() == KeyCode.ESCAPE){
+
+                    if(isPaused){
+
+                        resumeGame();
+
+                    }else{
+
+                        pauseGame();
+
+                    }
+
+                }
 
             });
 
@@ -95,8 +127,12 @@ public class Game extends Application {
 
             scene.setOnMouseMoved(event -> {
 
-                mouse_x_position = event.getX();
-                mouse_y_position = event.getY();
+                if(!isPaused){
+
+                    mouse_x_position = event.getX();
+                    mouse_y_position = event.getY();
+
+                }
 
             });
 
@@ -139,15 +175,66 @@ public class Game extends Application {
         bullets.clear();
         gamePane.getChildren().clear();
 
+        gamePane.setMouseTransparent(true);
+
         //Put the player into the gamepane (or the window)
         gamePane.getChildren().add(player.getNode());
+
+        gameRoot = new StackPane();
+        gameRoot.getChildren().add(gamePane);
 
         //Call and start the game loop
         initializeGameLoop();
         gameLoop.start();
 
         //Set the scene (or the window) and put it on the screen
-        scene.setRoot(gamePane);
+        scene.setRoot(gameRoot);
+
+    }
+
+    public void pauseGame(){
+
+        if(!isPaused){
+
+            isPaused = true;
+            gameLoop.stop();
+
+            if(!gameRoot.getChildren().contains(pauseMenu)){
+
+                gameRoot.getChildren().add(pauseMenu);
+
+            }
+
+        }
+
+    }
+
+    public void resumeGame(){
+
+        if(isPaused){
+
+            isPaused = false;
+            gameLoop.start();
+
+            gameRoot.getChildren().remove(pauseMenu);
+
+        }
+
+    }
+
+    public void goToMenu(){
+        
+        gameLoop.stop();
+        isPaused = false;
+
+        gamePane.getChildren().clear();
+        obstacles.clear();
+        bullets.clear();
+
+        mouseButtonsPressed.clear();
+        keysPressed.clear();
+
+        scene.setRoot(menuPane);
 
     }
 
@@ -214,8 +301,13 @@ public class Game extends Application {
                         //If its less than 30, then shoot, bye obstacle
                         if(distance < 30){
 
-                            gamePane.getChildren().remove(bullet.getNode());
-                            gamePane.getChildren().remove(obstacle.getNode());
+                            Platform.runLater(() -> {
+                                
+                                gamePane.getChildren().remove(bullet.getNode());
+                                gamePane.getChildren().remove(obstacle.getNode());
+
+                            });
+
                             bulletIterator.remove();
                             obstactsIterator.remove();
                             bullet_hit = true;
@@ -228,7 +320,7 @@ public class Game extends Application {
                     //This is if the bullet is off the screen, then we can remove it (not needed anymore lol)
                     if(!bullet_hit && bullet.isOffScreen(WINDOW_LENGTH, WINDOW_HEIGHT)){
 
-                        gamePane.getChildren().remove(bullet.getNode());
+                        Platform.runLater(() -> gamePane.getChildren().remove(bullet.getNode()));
                         bulletIterator.remove();
 
                     }
@@ -275,7 +367,7 @@ public class Game extends Application {
 
                     if(distance_player_obstacle < 50){
 
-                        gamePane.getChildren().remove(player.getNode());
+                        Platform.runLater(() -> gamePane.getChildren().remove(player.getNode()));
                         gameLoop.stop();
 
                         System.out.println("Game Over!");
@@ -285,7 +377,7 @@ public class Game extends Application {
                     //If the obstacle is off the screen now, remove it
                     if(obstacle.isOffScreen(WINDOW_LENGTH, WINDOW_HEIGHT)){
 
-                        gamePane.getChildren().remove(obstacle.getNode());
+                        Platform.runLater(() -> gamePane.getChildren().remove(obstacle.getNode()));
                         obstacleIterator.remove();
 
                     }
