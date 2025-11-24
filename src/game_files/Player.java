@@ -70,29 +70,47 @@ public class Player {
 
     public void moveUp() {
 
-        this.y -= MOVE_SPEED; 
-        this.node.setLayoutY(this.y- (IMAGE_HEIGHT/2));
+        if(this.y - MOVE_SPEED >= (IMAGE_HEIGHT/2)){
+
+            this.y -= MOVE_SPEED; 
+            this.node.setLayoutY(this.y - (IMAGE_HEIGHT/2));
+
+        }
 
     }
     
-    public void moveDown() {
+    public void moveDown(double window_height) {
 
-        this.y += MOVE_SPEED; 
-        this.node.setLayoutY(this.y- (IMAGE_HEIGHT/2));
+        if(this.y + MOVE_SPEED <= window_height - (IMAGE_HEIGHT/2)){
+
+            this.y += MOVE_SPEED; 
+            this.node.setLayoutY(this.y - (IMAGE_HEIGHT/2));
+
+        }
+
 
     }
 
     public void moveLeft() {
 
-        this.x -= MOVE_SPEED;
-        this.node.setLayoutX(this.x - (IMAGE_WIDTH/2));
+        if(this.x - MOVE_SPEED >= (IMAGE_WIDTH/2)){
+
+            this.x -= MOVE_SPEED;
+            this.node.setLayoutX(this.x - (IMAGE_WIDTH/2));
+
+        }
+
 
     }
 
-    public void moveRight() {
+    public void moveRight(double window_width) {
 
-        this.x += MOVE_SPEED;
-        this.node.setLayoutX(this.x - (IMAGE_WIDTH/2));
+        if(this.x + MOVE_SPEED <= window_width - (IMAGE_WIDTH/2)){
+
+            this.x += MOVE_SPEED;
+            this.node.setLayoutX(this.x - (IMAGE_WIDTH/2));
+
+        }
 
     }
 

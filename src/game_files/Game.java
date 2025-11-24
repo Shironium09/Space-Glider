@@ -6,10 +6,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main_menu.MenuController;
 import main_menu.PauseController;
@@ -24,7 +24,7 @@ import javafx.application.Platform;
 public class Game extends Application {
 
     //Window Dimensions (Might change later, idk)
-    private static final double WINDOW_LENGTH = 1000;
+    private static final double WINDOW_LENGTH = 900;
     private static final double WINDOW_HEIGHT = 700;
 
     //Game Loop Declaration
@@ -52,7 +52,7 @@ public class Game extends Application {
     private List<Bullet> bullets = new ArrayList<>();
 
     //Spawn Rate for the obstacles
-    private double spawnRate = 5.0;
+    private double spawnRate = 1.0;
     private double spawnInterval = (10.0*60.0) / spawnRate;
     private int spawnTimer = 0;
 
@@ -70,6 +70,10 @@ public class Game extends Application {
     //For mouse directions
     private double mouse_x_position;
     private double mouse_y_position;
+
+    //For time and score
+    private Score score;
+    private Time time;
 
     @Override
     public void start(Stage primaryStage){
@@ -170,6 +174,21 @@ public class Game extends Application {
         player = new Player();
         player.setPos(WINDOW_LENGTH/2, WINDOW_HEIGHT/2);
 
+        //Create a score and time object
+        score = new Score();
+        time = new Time();
+
+        AnchorPane uiLayer = new AnchorPane();
+
+        uiLayer.getChildren().addAll(score.getNode(), time.getNode());
+        uiLayer.setMouseTransparent(true);
+
+        AnchorPane.setTopAnchor(time.getNode(), 20.0);
+        AnchorPane.setLeftAnchor(time.getNode(), 20.0);
+
+        AnchorPane.setTopAnchor(score.getNode(), 20.0);
+        AnchorPane.setRightAnchor(score.getNode(), 20.0);
+
         //Clear the everything first (start with empty canvas with no enemies or bullets or something idk)
         obstacles.clear();
         bullets.clear();
@@ -181,7 +200,7 @@ public class Game extends Application {
         gamePane.getChildren().add(player.getNode());
 
         gameRoot = new StackPane();
-        gameRoot.getChildren().add(gamePane);
+        gameRoot.getChildren().addAll(gamePane, uiLayer);
 
         //Call and start the game loop
         initializeGameLoop();
@@ -245,11 +264,13 @@ public class Game extends Application {
             @Override
             public void handle(long now) {
                 
+                time.update();
+
                 //This is for the player movement
                 if (keysPressed.contains(KeyCode.W)){player.moveUp();}
-                if (keysPressed.contains(KeyCode.S)){player.moveDown();}
+                if (keysPressed.contains(KeyCode.S)){player.moveDown(WINDOW_HEIGHT);}
                 if (keysPressed.contains(KeyCode.A)){player.moveLeft();}
-                if (keysPressed.contains(KeyCode.D)){player.moveRight();}
+                if (keysPressed.contains(KeyCode.D)){player.moveRight(WINDOW_LENGTH);}
 
                 //Get the position of the cursor, make the player face there
                 player.face_direction(mouse_x_position, mouse_y_position);
@@ -308,6 +329,7 @@ public class Game extends Application {
 
                             });
 
+                            score.addScore(100);
                             bulletIterator.remove();
                             obstactsIterator.remove();
                             bullet_hit = true;
@@ -371,14 +393,6 @@ public class Game extends Application {
                         gameLoop.stop();
 
                         System.out.println("Game Over!");
-
-                    }
-
-                    //If the obstacle is off the screen now, remove it
-                    if(obstacle.isOffScreen(WINDOW_LENGTH, WINDOW_HEIGHT)){
-
-                        Platform.runLater(() -> gamePane.getChildren().remove(obstacle.getNode()));
-                        obstacleIterator.remove();
 
                     }
 
