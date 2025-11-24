@@ -35,6 +35,9 @@ public class Game extends Application {
     private Pane gamePane;
     private Scene scene;
 
+    //For gameover / retrying
+    private Parent retryMenu;
+
     //For pausing
     private StackPane gameRoot;
     private Parent pauseMenu;
@@ -74,6 +77,9 @@ public class Game extends Application {
     //For time and score
     private Score score;
     private Time time;
+
+    //For the name
+    private String playerName = "NULL";
 
     @Override
     public void start(Stage primaryStage){
@@ -389,7 +395,19 @@ public class Game extends Application {
 
                     if(distance_player_obstacle < 50){
 
-                        Platform.runLater(() -> gamePane.getChildren().remove(player.getNode()));
+                        player.setScore(score.getScore()); 
+                        player.setTime(time.getTime());
+
+                        Platform.runLater(() -> {
+
+                            gamePane.getChildren().remove(player.getNode());
+                            showInputScreen(); 
+
+                        });
+
+                        player.setScore(score.getScore());
+                        player.setTime(time.getTime());
+
                         gameLoop.stop();
 
                         System.out.println("Game Over!");
@@ -410,9 +428,78 @@ public class Game extends Application {
 
                 }
 
-            }
+            } 
         };
 
+    }
+
+    public void showRetryScreen(){
+
+        Platform.runLater(() -> {
+
+            try{
+
+                if(gameRoot.getChildren().size() > 1){
+
+                    gameRoot.getChildren().remove(gameRoot.getChildren().size() - 1);
+
+                }
+
+                URL retryUrl = getClass().getResource("/main_menu/gameover.fxml");
+                FXMLLoader loader = new FXMLLoader(retryUrl);
+                retryMenu = loader.load();
+
+                main_menu.GameOverController controller = loader.getController();
+                controller.setGame(this);
+
+                gameRoot.getChildren().add(retryMenu);
+
+            }catch(IOException e){
+
+                e.printStackTrace();
+
+            }
+
+        });
+
+    }
+    
+    public void removeRetryScreen(){
+
+        gameRoot.getChildren().remove(retryMenu);
+
+    }
+
+    public void showInputScreen(){
+
+        Platform.runLater(() -> {
+
+            try{
+
+                URL inputUrl = getClass().getResource("/main_menu/input.fxml");
+                FXMLLoader loader = new FXMLLoader(inputUrl);
+                Parent inputRoot = loader.load();
+
+                main_menu.InputController controller = loader.getController();
+
+                controller.setData(this, player);
+
+                gameRoot.getChildren().add(inputRoot);
+
+            }catch(IOException e){
+
+                e.printStackTrace();
+
+            }
+
+        });
+
+    }
+
+    public void setPlayerName(String name){
+
+        this.playerName = name;
+    
     }
 
 }

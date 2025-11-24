@@ -10,6 +10,9 @@ public class Player {
     private Node node;
     private double x;
     private double y;
+    private String name;
+    private int score;
+    private double time;
 
     private static final double MOVE_SPEED = 7.0;
 
@@ -31,6 +34,8 @@ public class Player {
 
         this.x = 0;
         this.y = 0;
+
+        this.name = "NULL";
 
     }
 
@@ -125,6 +130,48 @@ public class Player {
     public double getY() {
 
         return this.y;
+
+    }
+
+    //For the name
+
+    public void setName(String name){
+
+        this.name = name;
+
+    }
+
+    public String getName(){
+
+        return this.name;
+
+    }
+
+    //For time
+
+    public void setTime(double time){
+
+        this.time = time;
+
+    }
+
+    public double getTime(){
+
+        return this.time;
+
+    }
+
+    //For score
+
+    public void setScore(int score){
+
+        this.score = score;
+
+    }
+
+    public int getScore(){
+
+        return this.score;
 
     }
 
