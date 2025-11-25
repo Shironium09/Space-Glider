@@ -249,7 +249,13 @@ public class Game extends Application {
 
     public void goToMenu(){
         
-        gameLoop.stop();
+
+        if(gameLoop != null){
+
+            gameLoop.stop();
+
+        }
+
         isPaused = false;
 
         gamePane.getChildren().clear();
@@ -500,6 +506,30 @@ public class Game extends Application {
 
         this.playerName = name;
     
+    }
+
+    public void showLeaderboard(){
+
+        Platform.runLater(() -> {
+
+            try{
+
+                URL lbUrl = getClass().getResource("/main_menu/leaderboard.fxml");
+                FXMLLoader loader = new FXMLLoader(lbUrl);
+                Parent lbRoot = loader.load();
+
+                main_menu.LeaderboardController controller = loader.getController();
+                controller.setGame(this);
+                scene.setRoot(lbRoot);
+
+            }catch(IOException e){
+
+                e.printStackTrace();
+
+            }
+
+        });
+
     }
 
 }

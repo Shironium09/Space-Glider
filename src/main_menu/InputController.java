@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import game_files.Game;
 import game_files.Player;
+import backend.DatabaseManager;
 
 public class InputController {
     
@@ -51,6 +52,8 @@ public class InputController {
         System.out.println("-------------------");
         
         game.setPlayerName(name);
+
+        DatabaseManager.SaveData(player.getName(), player.getScore(), player.getTime());
 
         game.showRetryScreen();
             

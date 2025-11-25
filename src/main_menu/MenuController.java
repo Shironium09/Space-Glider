@@ -23,6 +23,17 @@ public class MenuController {
         }
 
     }
+
+    @FXML
+    private void handleLeaderboards(){
+
+        if(game != null){
+
+            game.showLeaderboard();
+
+        }
+
+    }
     
     @FXML
     private void handleExitButton(){

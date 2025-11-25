@@ -12,9 +12,9 @@
     </padding>
 
     <Text fx:id="title_text" text="Space Glider" />
-    
+
     <Button id="startButton" fx:id="startButton" onAction="#handleStartButton" prefHeight="44.0" prefWidth="167.0" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-border-radius: 20px; -fx-cursor: hand;" text="Start Game" />
-    <Button prefHeight="43.0" prefWidth="166.0" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-radius: 20px; -fx-border-color: white; -fx-cursor: hand;" text="Leaderboards" /> 
+    <Button prefHeight="43.0" onAction="#handleLeaderboards" prefWidth="166.0" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-radius: 20px; -fx-border-color: white; -fx-cursor: hand;" text="Leaderboards" /> 
     <Button fx:id="exitButton" onAction="#handleExitButton" prefHeight="48.0" prefWidth="166.0" style="-fx-font-size: 20px; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 20px; -fx-cursor: hand;" text="Exit" />
     
 </VBox>

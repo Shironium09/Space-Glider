@@ -28,3 +28,35 @@
     -fx-stroke-width: 2px;
 
 }
+
+.leaderboard-list{
+
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+}
+
+.leaderboard-list .viewport{
+
+    -fx-background-color: transparent;
+
+}
+
+.leaderboard-list .list-cell{
+
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-family: "Arial";
+    
+    -fx-alignment: CENTER; 
+    -fx-content-display: CENTER;
+
+}
+
+.leaderboard-list .list-cell:empty{
+
+    -fx-background-color: transparent;
+    -fx-border-width: 0px;
+
+}
