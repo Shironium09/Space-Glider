@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="menu_pane" alignment="CENTER" prefHeight="448.0" prefWidth="370.0" spacing="20" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_menu.LeaderboardController">
+<VBox id="menu_pane" alignment="CENTER" prefHeight="448.0" prefWidth="370.0" spacing="20" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_menu.LeaderboardController">
       
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Text id="title-text" text="Cadets' Hall of Fame" />
+    <Text fx:id="title_text" text="Cadet's Hall of Fame" />
     
     <ListView fx:id="scoreList" prefHeight="300.0" prefWidth="300.0" styleClass="leaderboard-list" />
 
-    <Button onAction="#handleBack" styleClass="menu-button" text="Back" />
+    <Button onAction="#handleBack" style="-fx-text-fill: white; -fx-background-color: black; -fx-font-size: 15px; -fx-padding: 10px; -fx-border-color: white; -fx-cursor: hand;" styleClass="menu-button" text="Back" />
     
 </VBox>

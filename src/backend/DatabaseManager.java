@@ -64,7 +64,7 @@ public class DatabaseManager {
 
         List<String> results = new ArrayList<>();
 
-        String sql = "SELECT name, score, time FROM scores ORDER BY score DESC LIMIT 10";
+        String sql = "SELECT name, score, time FROM scores ORDER BY score DESC LIMIT 5";
 
         try(Connection con = DriverManager.getConnection(URL);
             Statement stmt = con.createStatement();

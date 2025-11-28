@@ -15,7 +15,7 @@ public class Time {
         this.time = 0;
 
         this.time_text = new Text("Time: 0s");
-        this.time_text.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        this.time_text.setFont(Font.font("Press Start 2P", 20));
         this.time_text.setFill(Color.WHITE);
 
     }

@@ -15,7 +15,7 @@ public class Score{
         this.current_score = 0;
 
         this.score_text = new Text("Score: 0");
-        this.score_text.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+        this.score_text.setFont(Font.font("Press Start 2P", 20));
         this.score_text.setFill(Color.WHITE);
 
     }

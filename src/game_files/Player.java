@@ -12,9 +12,13 @@ public class Player {
     private double y;
     private String name;
     private int score;
+    private int health;
     private double time;
 
     private static final double MOVE_SPEED = 7.0;
+
+    private static final int DAMAGE = 20;
+    private static final int HEAL = 10;
 
     private static final double IMAGE_WIDTH = 80.0;
     private static final double IMAGE_HEIGHT = 80.0;
@@ -34,6 +38,7 @@ public class Player {
 
         this.x = 0;
         this.y = 0;
+        this.health = 100;
 
         this.name = "NULL";
 
@@ -172,6 +177,24 @@ public class Player {
     public int getScore(){
 
         return this.score;
+
+    }
+
+    public void takeDamage(){
+
+        this.health -= DAMAGE;
+
+    }
+
+    public void heal(){
+
+        this.health = (this.health + HEAL >= 100) ? 100 : this.health + HEAL;
+
+    }
+
+    public int getHealth(){
+
+        return this.health;
 
     }
 

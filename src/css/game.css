@@ -1,3 +1,10 @@
+.root{
+
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+
+}
+
 #root_pane{
 
     -fx-background-image: url('/assets/background-image.png');

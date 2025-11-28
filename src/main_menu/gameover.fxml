@@ -13,7 +13,7 @@
 
     <Text fx:id="title_text" text="What's Your Call?" />
 
-    <Button id="startButton" fx:id="startButton" onAction="#handleRetry" prefHeight="44.0" prefWidth="167.0" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-border-radius: 20px; -fx-cursor: hand;" text="Retry" />
-    <Button fx:id="exitButton" onAction="#handleMenu" prefHeight="48.0" prefWidth="166.0" style="-fx-font-size: 20px; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white; -fx-border-radius: 20px; -fx-cursor: hand;" text="Back to Menu" />
+    <Button id="startButton" fx:id="startButton" onAction="#handleRetry" prefHeight="46.0" prefWidth="190.0" style="-fx-font-size: 15px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-cursor: hand;" text="Retry" />
+    <Button fx:id="exitButton" onAction="#handleMenu" prefHeight="48.0" prefWidth="190.0" style="-fx-font-size: 15px; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white; -fx-cursor: hand;" text="Quit" />
     
 </VBox>

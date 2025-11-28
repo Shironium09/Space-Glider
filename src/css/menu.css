@@ -1,3 +1,10 @@
+.root{
+
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+
+}
+
 #menu_pane{
 
     -fx-background-image: url('/assets/background-image.png');
@@ -20,12 +27,9 @@
 
 #title_text{
 
-    -fx-text-fill: white;
-    -fx-font-size: 48px;
-    -fx-font-family: "Arial Black";
-    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 5, 0, 0, 2);
-    -fx-stroke: white;
-    -fx-stroke-width: 2px;
+    -fx-fill: white;
+    -fx-font-size: 35px;
+    -fx-padding: 20px 0;
 
 }
 
@@ -47,10 +51,10 @@
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-size: 20px;
-    -fx-font-family: "Arial";
-    
+
     -fx-alignment: CENTER; 
     -fx-content-display: CENTER;
+    -fx-padding: 20px 0;
 
 }
 

@@ -38,6 +38,9 @@ public class Game extends Application {
     //For gameover / retrying
     private Parent retryMenu;
 
+    //Helper variable
+    boolean isGameOver;
+
     //For pausing
     private StackPane gameRoot;
     private Parent pauseMenu;
@@ -81,12 +84,21 @@ public class Game extends Application {
     //For the name
     private String playerName = "NULL";
 
+    //For Music and SFX
+    private SoundManager soundManager;
+
+
+
     @Override
     public void start(Stage primaryStage){
 
         //This is for the window
         gamePane = new Pane();
         gamePane.setId("root_pane");
+
+        //For Music
+        soundManager = new SoundManager();
+        soundManager.playMenuMusic();
 
         try{
 
@@ -106,6 +118,24 @@ public class Game extends Application {
 
             PauseController pauseController = pauseLoader.getController();
             pauseController.setGame(this); 
+
+            //For custom font
+
+            javafx.scene.text.Font font = javafx.scene.text.Font.loadFont(
+                getClass().getResourceAsStream("/assets/fonts/pixel.ttf"), 10
+            );
+
+
+
+            if(font != null){
+
+                System.out.println("Font Loaded: " + font.getFamily());
+
+            }else{
+
+                System.out.println("Could not load font");
+
+            }
 
             //For detecting keyboard inputs (for the movement)
 
@@ -174,11 +204,29 @@ public class Game extends Application {
 
     }
  
+    public void reset(){
+
+        spawnRate = 1.0;
+        spawnInterval = (10.0*60.0) / spawnRate;
+        spawnTimer = 0;
+
+        scalingTimer = 0;
+
+        bulletRate = 1.0;
+        bulletInterval = (3.0*60.0) / bulletRate;
+        bulletTimer = 0;
+
+    }
+
     public void startGame(){
 
         //Create new player / load player object
         player = new Player();
         player.setPos(WINDOW_LENGTH/2, WINDOW_HEIGHT/2);
+
+        isGameOver = false;
+
+        soundManager.playGameMusic();
 
         //Create a score and time object
         score = new Score();
@@ -207,6 +255,8 @@ public class Game extends Application {
 
         gameRoot = new StackPane();
         gameRoot.getChildren().addAll(gamePane, uiLayer);
+
+        reset();
 
         //Call and start the game loop
         initializeGameLoop();
@@ -249,7 +299,6 @@ public class Game extends Application {
 
     public void goToMenu(){
         
-
         if(gameLoop != null){
 
             gameLoop.stop();
@@ -264,6 +313,8 @@ public class Game extends Application {
 
         mouseButtonsPressed.clear();
         keysPressed.clear();
+
+        soundManager.playMenuMusic();
 
         scene.setRoot(menuPane);
 
@@ -396,27 +447,26 @@ public class Game extends Application {
             
                     //If the obstacle "touches" the player, remove the player and stop the program, meaning
                     //Game over
-                    //TODO: Once the game is over, make a FXML file that asks if retry or not
-                    //Instead of stopping the game/program
 
                     if(distance_player_obstacle < 50){
 
+                        if(isGameOver){break;}
+
+                        isGameOver = true;
+
                         player.setScore(score.getScore()); 
                         player.setTime(time.getTime());
+
+                        soundManager.playGameOverMusic();
+
+                        gameLoop.stop();
 
                         Platform.runLater(() -> {
 
                             gamePane.getChildren().remove(player.getNode());
                             showInputScreen(); 
-
+                        
                         });
-
-                        player.setScore(score.getScore());
-                        player.setTime(time.getTime());
-
-                        gameLoop.stop();
-
-                        System.out.println("Game Over!");
 
                     }
 
@@ -477,6 +527,8 @@ public class Game extends Application {
     }
 
     public void showInputScreen(){
+
+        soundManager.playGameOverMusic();
 
         Platform.runLater(() -> {
 

@@ -2,7 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?> 
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
@@ -13,12 +13,10 @@
     </padding>
 
     <Text fx:id="title_text" text="Game Over!" />
-    <Text fx:id="title_text1" layoutX="172.0" layoutY="281.0" style="-fx-font-size: 15px; -fx-fill: white;" text="Better Luck Next Time, Cadet!" />
-
-    <Text styleClass="text" text="What's Your Name Cadet?" />
+    <Text fx:id="title_text1" layoutX="172.0" layoutY="281.0" style="-fx-font-size: 20px; -fx-fill: white;" text="Better Luck Next Time, Cadet!" />
     
-    <TextField fx:id="nameField" alignment="CENTER" maxWidth="200" style="-fx-font-size: 24px; -fx-background-color: #333; -fx-text-fill: white; -fx-border-color: white;" promptText="ABC" />
+    <TextField fx:id="nameField" alignment="CENTER" maxWidth="200" promptText="ABC" style="-fx-font-size: 24px; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" />
     
-    <Button onAction="#handleConfirm" styleClass="menu-button" text="Confirm" />
+    <Button onAction="#handleConfirm" style="-fx-font-size: 15px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-cursor: hand; -fx-padding: 10px;" styleClass="menu-button" text="Confirm" />
 
 </VBox>

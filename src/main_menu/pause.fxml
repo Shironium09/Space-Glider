@@ -10,7 +10,7 @@
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
 
-    <Button id="startButton" fx:id="startButton" onAction="#handleResume" prefHeight="44.0" prefWidth="167.0" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-border-radius: 20px; -fx-cursor: hand;" text="Continue" />
-    <Button prefHeight="43.0" prefWidth="166.0" onAction="#handleBackToMenu" style="-fx-font-size: 20px; -fx-text-fill: white; -fx-background-color: black; -fx-border-radius: 20px; -fx-border-color: white; -fx-cursor: hand;" text="Quit" /> 
+    <Button id="startButton" fx:id="startButton" onAction="#handleResume" prefHeight="46.0" prefWidth="230.0" style="-fx-font-size: 15px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-cursor: hand;" text="Continue" />
+    <Button onAction="#handleBackToMenu" prefHeight="46.0" prefWidth="230.0" style="-fx-font-size: 15px; -fx-text-fill: white; -fx-background-color: black; -fx-border-color: white; -fx-cursor: hand;" text="Quit" /> 
     
 </VBox>
