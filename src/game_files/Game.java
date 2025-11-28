@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 
 public class Game extends Application {
@@ -77,9 +79,10 @@ public class Game extends Application {
     private double mouse_x_position;
     private double mouse_y_position;
 
-    //For time and score
+    //For score, time, and health
     private Score score;
     private Time time;
+    private Health health;
 
     //For the name
     private String playerName = "NULL";
@@ -87,6 +90,10 @@ public class Game extends Application {
     //For Music and SFX
     private SoundManager soundManager;
 
+    //For Powerup
+    private List<PowerUp> powerups = new ArrayList<>();
+    private int powerupTimer = 0;
+    private double powerupInterval = 15.0 * 60.0;
 
 
     @Override
@@ -228,13 +235,14 @@ public class Game extends Application {
 
         soundManager.playGameMusic();
 
-        //Create a score and time object
+        //Create a score, time, and health object
         score = new Score();
         time = new Time();
+        health = new Health();
 
         AnchorPane uiLayer = new AnchorPane();
 
-        uiLayer.getChildren().addAll(score.getNode(), time.getNode());
+        uiLayer.getChildren().addAll(score.getNode(), time.getNode(), health.getNode()); 
         uiLayer.setMouseTransparent(true);
 
         AnchorPane.setTopAnchor(time.getNode(), 20.0);
@@ -243,9 +251,13 @@ public class Game extends Application {
         AnchorPane.setTopAnchor(score.getNode(), 20.0);
         AnchorPane.setRightAnchor(score.getNode(), 20.0);
 
+        AnchorPane.setBottomAnchor(health.getNode(), 20.0);
+        AnchorPane.setLeftAnchor(health.getNode(), 20.0);
+
         //Clear the everything first (start with empty canvas with no enemies or bullets or something idk)
         obstacles.clear();
         bullets.clear();
+        powerups.clear();
         gamePane.getChildren().clear();
 
         gamePane.setMouseTransparent(true);
@@ -341,6 +353,44 @@ public class Game extends Application {
                 //Increment spawntimer nad bullet time every frame
                 spawnTimer++;
                 bulletTimer++;
+                powerupTimer++;
+
+                //For the powerups
+                if (powerupTimer >= powerupInterval) {
+                    PowerUp p = new PowerUp(WINDOW_LENGTH, WINDOW_HEIGHT);
+                    powerups.add(p);
+                    gamePane.getChildren().add(p.getNode());
+                    powerupTimer = 0;
+                }
+
+
+                Iterator<PowerUp> powerIterator = powerups.iterator();
+
+                while (powerIterator.hasNext()) {
+                    PowerUp p = powerIterator.next();
+                    
+                    double dx = player.getX() - p.getX();
+                    double dy = player.getY() - p.getY();
+                    double dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if (dist < 50) {
+
+                        if (p.getType() == 0){
+
+                            player.heal();
+                            health.heal();
+
+                        }else{
+
+                            bulletRate += 0.5; 
+                            bulletInterval = (3.0 * 60.0) / bulletRate; 
+                        
+                        }
+
+                        Platform.runLater(() -> gamePane.getChildren().remove(p.getNode()));
+                        powerIterator.remove();
+                    }
+                }
 
                 //If the bulletTimer is equal to the bullet interval, then shoot
                 if(bulletTimer >= bulletInterval){
@@ -450,23 +500,29 @@ public class Game extends Application {
 
                     if(distance_player_obstacle < 50){
 
-                        if(isGameOver){break;}
+                        Platform.runLater(() -> gamePane.getChildren().remove(obstacle.getNode()));
+                        obstacleIterator.remove();
 
-                        isGameOver = true;
+                        player.takeDamage();
+                        health.takeDamage();
 
-                        player.setScore(score.getScore()); 
-                        player.setTime(time.getTime());
+                        if (player.getHealth() <= 0) {
+                            
+                            if (isGameOver){break;}
 
-                        soundManager.playGameOverMusic();
+                            isGameOver = true;
 
-                        gameLoop.stop();
+                            player.setScore(score.getScore()); 
+                            player.setTime(time.getTime());
+                            
+                            soundManager.playGameOverMusic();
+                            gameLoop.stop();
 
-                        Platform.runLater(() -> {
-
-                            gamePane.getChildren().remove(player.getNode());
-                            showInputScreen(); 
-                        
-                        });
+                            Platform.runLater(() -> {
+                                gamePane.getChildren().remove(player.getNode());
+                                showInputScreen(); 
+                            });
+                        }
 
                     }
 
