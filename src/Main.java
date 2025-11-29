@@ -7,6 +7,7 @@ public class Main {
 
         DatabaseManager.initDB();
 
+
         Application.launch(Game.class, args);
 
     }

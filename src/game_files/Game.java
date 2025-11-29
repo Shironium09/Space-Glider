@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.application.Platform;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-
 
 public class Game extends Application {
 
@@ -89,6 +86,7 @@ public class Game extends Application {
 
     //For Music and SFX
     private SoundManager soundManager;
+    private SoundFXManager soundFX;
 
     //For Powerup
     private List<PowerUp> powerups = new ArrayList<>();
@@ -106,6 +104,8 @@ public class Game extends Application {
         //For Music
         soundManager = new SoundManager();
         soundManager.playMenuMusic();
+
+        soundFX = new SoundFXManager();
 
         try{
 
@@ -222,6 +222,8 @@ public class Game extends Application {
         bulletRate = 1.0;
         bulletInterval = (3.0*60.0) / bulletRate;
         bulletTimer = 0;
+
+        powerupTimer = 0;
 
     }
 
@@ -373,7 +375,7 @@ public class Game extends Application {
                     double dy = player.getY() - p.getY();
                     double dist = Math.sqrt(dx*dx + dy*dy);
 
-                    if (dist < 50) {
+                    if (dist <= 75) {
 
                         if (p.getType() == 0){
 
@@ -387,6 +389,7 @@ public class Game extends Application {
                         
                         }
 
+                        soundFX.powerup();
                         Platform.runLater(() -> gamePane.getChildren().remove(p.getNode()));
                         powerIterator.remove();
                     }
@@ -400,6 +403,7 @@ public class Game extends Application {
                     bullets.add(newBullet);
                     gamePane.getChildren().add(newBullet.getNode());
                     bulletTimer = 0;
+                    soundFX.shoot();
 
                 }
 
@@ -432,8 +436,8 @@ public class Game extends Application {
 
                         double distance = Math.sqrt(delta_x * delta_x + delta_y * delta_y);
                         
-                        //If its less than 30, then shoot, bye obstacle
-                        if(distance < 30){
+                        //If its less than 80, then shoot, bye obstacle
+                        if(distance <= 50){
 
                             Platform.runLater(() -> {
                                 
@@ -441,6 +445,8 @@ public class Game extends Application {
                                 gamePane.getChildren().remove(obstacle.getNode());
 
                             });
+
+                            soundFX.defeat();
 
                             score.addScore(100);
                             bulletIterator.remove();
