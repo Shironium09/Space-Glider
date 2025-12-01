@@ -11,6 +11,8 @@ public class SoundFXManager {
     private AudioClip powerup;
     private AudioClip click;
     private AudioClip exit;
+    private AudioClip gameover;
+    private AudioClip damage;
 
     public SoundFXManager(){
 
@@ -19,6 +21,9 @@ public class SoundFXManager {
         powerup = loadSound("/assets/music/powerup.mp3");
         click = loadSound("/assets/music/click.mp3");
         exit = loadSound("/assets/music/seeya.mp3");
+        gameover = loadSound("/assets/music/gameoverfx.mp3");
+        damage = loadSound("/assets/music/damage.mp3");
+        
 
     }
 
@@ -94,6 +99,26 @@ public class SoundFXManager {
             exit.play();
 
         }
+
+    }
+
+    public void gameover(){
+
+        if(gameover != null){
+
+            gameover.play();
+
+        }
+
+    }
+
+    public void damage(){
+
+        if(damage != null){
+
+            damage.play();
+
+        }   
 
     }
 

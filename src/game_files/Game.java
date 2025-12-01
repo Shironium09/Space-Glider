@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.application.Platform;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Game extends Application {
 
@@ -443,6 +447,7 @@ public class Game extends Application {
                                 
                                 gamePane.getChildren().remove(bullet.getNode());
                                 gamePane.getChildren().remove(obstacle.getNode());
+                                playExplosion(obstacle.getX(), obstacle.getY());
 
                             });
 
@@ -509,11 +514,28 @@ public class Game extends Application {
                         Platform.runLater(() -> gamePane.getChildren().remove(obstacle.getNode()));
                         obstacleIterator.remove();
 
+                        soundFX.damage();
+
                         player.takeDamage();
                         health.takeDamage();
 
                         if (player.getHealth() <= 0) {
                             
+                            playExplosion(player.getX(), player.getY());
+                            soundManager.stopAll();
+                            soundFX.gameover();
+
+                            try{
+
+                                Thread.sleep(2500);
+
+                            }catch(InterruptedException e){
+
+                            Thread.currentThread().interrupt();
+                            System.out.println("Timeout Interrupted");
+
+                            }
+
                             if (isGameOver){break;}
 
                             isGameOver = true;
@@ -643,6 +665,39 @@ public class Game extends Application {
             }
 
         });
+
+    }
+
+    private void playExplosion(double explodeX, double explodeY){
+
+        try{
+
+            Image explosion = new Image("file:src/assets/boom.gif");
+            ImageView explosionNode = new ImageView(explosion);
+
+            explosionNode.setFitWidth(64);
+            explosionNode.setFitHeight(64);
+
+            explosionNode.setLayoutX(explodeX - (64 / 2));
+            explosionNode.setLayoutY(explodeY - (64 / 2));
+            explosionNode.setMouseTransparent(true);
+
+            gamePane.getChildren().add(explosionNode);
+
+            PauseTransition delay = new PauseTransition(Duration.seconds(0.8));
+            delay.setOnFinished(event -> {
+
+                gamePane.getChildren().remove(explosionNode);
+
+            });
+
+            delay.play();
+
+        }catch(Exception e){
+
+            System.out.println("Error loading Gif: " + e);
+
+        }
 
     }
 
