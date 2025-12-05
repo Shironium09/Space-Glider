@@ -14,7 +14,7 @@
 
     <Text fx:id="title_text" text="Cadet's Hall of Fame" />
     
-    <ListView fx:id="scoreList" prefHeight="300.0" prefWidth="300.0" styleClass="leaderboard-list" />
+    <ListView fx:id="scoreList" prefHeight="330.0" prefWidth="300.0" styleClass="leaderboard-list" />
 
     <Button onAction="#handleBack" style="-fx-text-fill: white; -fx-background-color: black; -fx-font-size: 15px; -fx-padding: 10px; -fx-border-color: white; -fx-cursor: hand;" styleClass="menu-button" text="Back" />
     

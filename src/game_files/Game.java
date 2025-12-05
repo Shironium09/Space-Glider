@@ -23,6 +23,9 @@ import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.ImageCursor;
+import javafx.scene.image.Image;
+import javafx.scene.Cursor;
 
 public class Game extends Application {
 
@@ -260,6 +263,18 @@ public class Game extends Application {
         AnchorPane.setBottomAnchor(health.getNode(), 20.0);
         AnchorPane.setLeftAnchor(health.getNode(), 20.0);
 
+        try{
+
+            Image cursorImg = new Image("file:src/assets/cursor.png");
+            ImageCursor customCursor = new ImageCursor(cursorImg, cursorImg.getWidth()/2, cursorImg.getHeight()/2);
+            scene.setCursor(customCursor);
+
+        }catch(Exception e){
+
+            System.out.println("Could not load cursor image.");
+
+        }
+
         //Clear the everything first (start with empty canvas with no enemies or bullets or something idk)
         obstacles.clear();
         bullets.clear();
@@ -325,6 +340,7 @@ public class Game extends Application {
 
         isPaused = false;
 
+        scene.setCursor(Cursor.DEFAULT);
         gamePane.getChildren().clear();
         obstacles.clear();
         bullets.clear();
