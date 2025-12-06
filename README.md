@@ -1,7 +1,3 @@
-
-
-# =====PROJECT ONGOING=====
- 
 # 🚀 Space Glider
 
 A simple 2d Bullet-Hell.
